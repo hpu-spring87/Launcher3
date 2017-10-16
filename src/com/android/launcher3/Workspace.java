@@ -3019,6 +3019,7 @@ public class Workspace extends PagedView
 
                 // Otherwise, if we aren't adding to or creating a folder and there's no pending
                 // reorder, then we schedule a reorder
+                // reorer, then we schedule a reorder
                 ReorderAlarmListener listener = new ReorderAlarmListener(mDragViewVisualCenter,
                         minSpanX, minSpanY, item.spanX, item.spanY, d, child);
                 mReorderAlarm.setOnAlarmListener(listener);

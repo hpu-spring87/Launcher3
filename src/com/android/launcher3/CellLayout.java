@@ -73,13 +73,15 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     public static final int FOLDER_ACCESSIBILITY_DRAG = 1;
 
     private static final String TAG = "CellLayout";
-    private static final boolean LOGD = false;
+    private static final boolean LOGD = true;
 
     private Launcher mLauncher;
     @ViewDebug.ExportedProperty(category = "launcher")
-    @Thunk int mCellWidth;
+    @Thunk
+    int mCellWidth;
     @ViewDebug.ExportedProperty(category = "launcher")
-    @Thunk int mCellHeight;
+    @Thunk
+    int mCellHeight;
     private int mFixedCellWidth;
     private int mFixedCellHeight;
 
@@ -94,8 +96,10 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     // These are temporary variables to prevent having to allocate a new object just to
     // return an (x, y) value from helper functions. Do NOT use them to maintain other state.
-    @Thunk final int[] mTmpPoint = new int[2];
-    @Thunk final int[] mTempLocation = new int[2];
+    @Thunk
+    final int[] mTmpPoint = new int[2];
+    @Thunk
+    final int[] mTempLocation = new int[2];
 
     private GridOccupancy mOccupied;
     private GridOccupancy mTmpOccupied;
@@ -108,7 +112,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     private float mBackgroundAlpha;
 
-    private static final int[] BACKGROUND_STATE_ACTIVE = new int[] { android.R.attr.state_active };
+    private static final int[] BACKGROUND_STATE_ACTIVE = new int[]{android.R.attr.state_active};
     private static final int[] BACKGROUND_STATE_DEFAULT = new int[0];
     private final Drawable mBackground;
 
@@ -121,8 +125,10 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     // These arrays are used to implement the drag visualization on x-large screens.
     // They are used as circular arrays, indexed by mDragOutlineCurrent.
-    @Thunk Rect[] mDragOutlines = new Rect[4];
-    @Thunk float[] mDragOutlineAlphas = new float[mDragOutlines.length];
+    @Thunk
+    Rect[] mDragOutlines = new Rect[4];
+    @Thunk
+    float[] mDragOutlineAlphas = new float[mDragOutlines.length];
     private InterruptibleInOutAnimator[] mDragOutlineAnims =
             new InterruptibleInOutAnimator[mDragOutlines.length];
 
@@ -132,8 +138,10 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     private final ClickShadowView mTouchFeedbackView;
 
-    @Thunk HashMap<CellLayout.LayoutParams, Animator> mReorderAnimators = new HashMap<>();
-    @Thunk HashMap<View, ReorderPreviewAnimation> mShakeAnimators = new HashMap<>();
+    @Thunk
+    HashMap<CellLayout.LayoutParams, Animator> mReorderAnimators = new HashMap<>();
+    @Thunk
+    HashMap<View, ReorderPreviewAnimation> mShakeAnimators = new HashMap<>();
 
     private boolean mItemPlacementDirty = false;
 
@@ -147,12 +155,15 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({WORKSPACE, HOTSEAT, FOLDER})
-    public @interface ContainerType{}
+    public @interface ContainerType {
+    }
+
     public static final int WORKSPACE = 0;
     public static final int HOTSEAT = 1;
     public static final int FOLDER = 2;
 
-    @ContainerType private final int mContainerType;
+    @ContainerType
+    private final int mContainerType;
 
     private final float mChildScale;
 
@@ -166,7 +177,8 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     private static final float REORDER_PREVIEW_MAGNITUDE = 0.12f;
     private static final int REORDER_ANIMATION_DURATION = 150;
-    @Thunk final float mReorderPreviewAnimationMagnitude;
+    @Thunk
+    final float mReorderPreviewAnimationMagnitude;
 
     private ArrayList<View> mIntersectingViews = new ArrayList<View>();
     private Rect mOccupiedRect = new Rect();
@@ -209,7 +221,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
         mCountX = grid.inv.numColumns;
         mCountY = grid.inv.numRows;
-        mOccupied =  new GridOccupancy(mCountX, mCountY);
+        mOccupied = new GridOccupancy(mCountX, mCountY);
         mTmpOccupied = new GridOccupancy(mCountX, mCountY);
 
         mPreviousReorderDirection[0] = INVALID_DIRECTION;
@@ -243,18 +255,18 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         // Set up all the animations that are used to implement this fading.
         final int duration = res.getInteger(R.integer.config_dragOutlineFadeTime);
         final float fromAlphaValue = 0;
-        final float toAlphaValue = (float)res.getInteger(R.integer.config_dragOutlineMaxAlpha);
+        final float toAlphaValue = (float) res.getInteger(R.integer.config_dragOutlineMaxAlpha);
 
         Arrays.fill(mDragOutlineAlphas, fromAlphaValue);
 
         for (int i = 0; i < mDragOutlineAnims.length; i++) {
             final InterruptibleInOutAnimator anim =
-                new InterruptibleInOutAnimator(this, duration, fromAlphaValue, toAlphaValue);
+                    new InterruptibleInOutAnimator(this, duration, fromAlphaValue, toAlphaValue);
             anim.getAnimator().setInterpolator(mEaseOutInterpolator);
             final int thisIndex = i;
             anim.getAnimator().addUpdateListener(new AnimatorUpdateListener() {
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    final Bitmap outline = (Bitmap)anim.getTag();
+                    final Bitmap outline = (Bitmap) anim.getTag();
 
                     // If an animation is started and then stopped very quickly, we can still
                     // get spurious updates we've cleared the tag. Guard against this.
@@ -262,7 +274,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
                         if (LOGD) {
                             Object val = animation.getAnimatedValue();
                             Log.d(TAG, "anim " + thisIndex + " update: " + val +
-                                     ", isStopped " + anim.isStopped());
+                                    ", isStopped " + anim.isStopped());
                         }
                         // Try to prevent it from continuing to run
                         animation.cancel();
@@ -473,7 +485,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
             final float alpha = mDragOutlineAlphas[i];
             if (alpha > 0) {
                 final Bitmap b = (Bitmap) mDragOutlineAnims[i].getTag();
-                paint.setAlpha((int)(alpha + .5f));
+                paint.setAlpha((int) (alpha + .5f));
                 canvas.drawBitmap(b, null, mDragOutlines[i], paint);
             }
         }
@@ -481,7 +493,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         if (DEBUG_VISUALIZE_OCCUPIED) {
             int[] pt = new int[2];
             ColorDrawable cd = new ColorDrawable(Color.RED);
-            cd.setBounds(0, 0,  mCellWidth, mCellHeight);
+            cd.setBounds(0, 0, mCellWidth, mCellHeight);
             for (int i = 0; i < mCountX; i++) {
                 for (int j = 0; j < mCountY; j++) {
                     if (mOccupied.cells[i][j]) {
@@ -536,6 +548,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     public void addFolderBackground(FolderIcon.PreviewBackground bg) {
         mFolderBackgrounds.add(bg);
     }
+
     public void removeFolderBackground(FolderIcon.PreviewBackground bg) {
         mFolderBackgrounds.remove(bg);
     }
@@ -605,9 +618,10 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     public boolean addViewToCellLayout(View child, int index, int childId, LayoutParams params,
-            boolean markCells) {
+                                       boolean markCells) {
         final LayoutParams lp = params;
 
+        Log.e("addViewToCellLayout:", "index:" + index + " childId:" + childId);
         // Hotseat icons - remove text
         if (child instanceof BubbleTextView) {
             BubbleTextView bubbleChild = (BubbleTextView) child;
@@ -627,7 +641,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
             child.setId(childId);
             if (LOGD) {
-                Log.d(TAG, "Adding view to ShortcutsAndWidgetsContainer: " + child);
+                Log.e(TAG, "Adding view to ShortcutsAndWidgetsContainer: " + child);
             }
             mShortcutsAndWidgets.addView(child, index, lp);
 
@@ -688,8 +702,9 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     /**
      * Given a point, return the cell that strictly encloses that point
-     * @param x X coordinate of the point
-     * @param y Y coordinate of the point
+     *
+     * @param x      X coordinate of the point
+     * @param y      Y coordinate of the point
      * @param result Array of 2 ints to hold the x and y coordinate of the cell
      */
     public void pointToCellExact(int x, int y, int[] result) {
@@ -710,8 +725,9 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     /**
      * Given a point, return the cell that most closely encloses that point
-     * @param x X coordinate of the point
-     * @param y Y coordinate of the point
+     *
+     * @param x      X coordinate of the point
+     * @param y      Y coordinate of the point
      * @param result Array of 2 ints to hold the x and y coordinate of the cell
      */
     void pointToCellRounded(int x, int y, int[] result) {
@@ -721,9 +737,8 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     /**
      * Given a cell coordinate, return the point that represents the upper left corner of that cell
      *
-     * @param cellX X coordinate of the cell
-     * @param cellY Y coordinate of the cell
-     *
+     * @param cellX  X coordinate of the cell
+     * @param cellY  Y coordinate of the cell
      * @param result Array of 2 ints to hold the x and y coordinate of the point
      */
     void cellToPoint(int cellX, int cellY, int[] result) {
@@ -737,9 +752,8 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     /**
      * Given a cell coordinate, return the point that represents the center of the cell
      *
-     * @param cellX X coordinate of the cell
-     * @param cellY Y coordinate of the cell
-     *
+     * @param cellX  X coordinate of the cell
+     * @param cellY  Y coordinate of the cell
      * @param result Array of 2 ints to hold the x and y coordinate of the point
      */
     void cellToCenterPoint(int cellX, int cellY, int[] result) {
@@ -749,9 +763,8 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     /**
      * Given a cell coordinate and span return the point that represents the center of the regio
      *
-     * @param cellX X coordinate of the cell
-     * @param cellY Y coordinate of the cell
-     *
+     * @param cellX  X coordinate of the cell
+     * @param cellY  Y coordinate of the cell
      * @param result Array of 2 ints to hold the x and y coordinate of the point
      */
     void regionToCenterPoint(int cellX, int cellY, int spanX, int spanY, int[] result) {
@@ -761,14 +774,14 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         result[1] = vStartPadding + cellY * mCellHeight + (spanY * mCellHeight) / 2;
     }
 
-     /**
+    /**
      * Given a cell coordinate and span fills out a corresponding pixel rect
      *
-     * @param cellX X coordinate of the cell
-     * @param cellY Y coordinate of the cell
+     * @param cellX  X coordinate of the cell
+     * @param cellY  Y coordinate of the cell
      * @param result Rect in which to write the result
      */
-     void regionToRect(int cellX, int cellY, int spanX, int spanY, Rect result) {
+    void regionToRect(int cellX, int cellY, int spanX, int spanY, Rect result) {
         final int hStartPadding = getPaddingLeft();
         final int vStartPadding = getPaddingTop();
         final int left = hStartPadding + cellX * mCellWidth;
@@ -799,7 +812,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSize =  MeasureSpec.getSize(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int childWidthSize = widthSize - (getPaddingLeft() + getPaddingRight());
         int childHeightSize = heightSize - (getPaddingTop() + getPaddingBottom());
         if (mFixedCellWidth < 0 || mFixedCellHeight < 0) {
@@ -909,7 +922,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     public boolean animateChildToPosition(final View child, int cellX, int cellY, int duration,
-            int delay, boolean permanent, boolean adjustOccupied) {
+                                          int delay, boolean permanent, boolean adjustOccupied) {
         ShortcutAndWidgetContainer clc = getShortcutsAndWidgets();
 
         if (clc.indexOfChild(child) != -1) {
@@ -966,6 +979,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
             });
             va.addListener(new AnimatorListenerAdapter() {
                 boolean cancelled = false;
+
                 public void onAnimationEnd(Animator animation) {
                     // If the animation was cancelled, it means that another animation
                     // has interrupted this one, and we don't want to lock the item into
@@ -978,6 +992,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
                         mReorderAnimators.remove(lp);
                     }
                 }
+
                 public void onAnimationCancel(Animator animation) {
                     cancelled = true;
                 }
@@ -990,7 +1005,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     void visualizeDropLocation(View v, DragPreviewProvider outlineProvider, int cellX, int cellY,
-            int spanX, int spanY, boolean resize, DropTarget.DragObject dragObject) {
+                               int spanX, int spanY, boolean resize, DropTarget.DragObject dragObject) {
         final int oldDragCellX = mDragCell[0];
         final int oldDragCellY = mDragCell[1];
 
@@ -1085,24 +1100,25 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
      * Find a vacant area that will fit the given bounds nearest the requested
      * cell location. Uses Euclidean distance to score multiple vacant areas.
      *
-     * @param pixelX The X location at which you want to search for a vacant area.
-     * @param pixelY The Y location at which you want to search for a vacant area.
+     * @param pixelX   The X location at which you want to search for a vacant area.
+     * @param pixelY   The Y location at which you want to search for a vacant area.
      * @param minSpanX The minimum horizontal span required
      * @param minSpanY The minimum vertical span required
-     * @param spanX Horizontal span of the object.
-     * @param spanY Vertical span of the object.
-     * @param result Array in which to place the result, or null (in which case a new array will
-     *        be allocated)
+     * @param spanX    Horizontal span of the object.
+     * @param spanY    Vertical span of the object.
+     * @param result   Array in which to place the result, or null (in which case a new array will
+     *                 be allocated)
      * @return The X, Y cell of a vacant area that can contain this object,
-     *         nearest the requested location.
+     * nearest the requested location.
      */
     int[] findNearestVacantArea(int pixelX, int pixelY, int minSpanX, int minSpanY, int spanX,
-            int spanY, int[] result, int[] resultSpan) {
+                                int spanY, int[] result, int[] resultSpan) {
         return findNearestArea(pixelX, pixelY, minSpanX, minSpanY, spanX, spanY, true,
                 result, resultSpan);
     }
 
     private final Stack<Rect> mTempRectStack = new Stack<Rect>();
+
     private void lazyInitTempRectStack() {
         if (mTempRectStack.isEmpty()) {
             for (int i = 0; i < mCountX * mCountY; i++) {
@@ -1121,20 +1137,20 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
      * Find a vacant area that will fit the given bounds nearest the requested
      * cell location. Uses Euclidean distance to score multiple vacant areas.
      *
-     * @param pixelX The X location at which you want to search for a vacant area.
-     * @param pixelY The Y location at which you want to search for a vacant area.
-     * @param minSpanX The minimum horizontal span required
-     * @param minSpanY The minimum vertical span required
-     * @param spanX Horizontal span of the object.
-     * @param spanY Vertical span of the object.
+     * @param pixelX         The X location at which you want to search for a vacant area.
+     * @param pixelY         The Y location at which you want to search for a vacant area.
+     * @param minSpanX       The minimum horizontal span required
+     * @param minSpanY       The minimum vertical span required
+     * @param spanX          Horizontal span of the object.
+     * @param spanY          Vertical span of the object.
      * @param ignoreOccupied If true, the result can be an occupied cell
-     * @param result Array in which to place the result, or null (in which case a new array will
-     *        be allocated)
+     * @param result         Array in which to place the result, or null (in which case a new array will
+     *                       be allocated)
      * @return The X, Y cell of a vacant area that can contain this object,
-     *         nearest the requested location.
+     * nearest the requested location.
      */
     private int[] findNearestArea(int pixelX, int pixelY, int minSpanX, int minSpanY, int spanX,
-            int spanY, boolean ignoreOccupied, int[] result, int[] resultSpan) {
+                                  int spanY, boolean ignoreOccupied, int[] result, int[] resultSpan) {
         lazyInitTempRectStack();
 
         // For items with a spanX / spanY > 1, the passed in point (pixelX, pixelY) corresponds
@@ -1183,7 +1199,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
                     while (!(hitMaxX && hitMaxY)) {
                         if (incX && !hitMaxX) {
                             for (int j = 0; j < ySize; j++) {
-                                if (x + xSize > countX -1 || mOccupied.cells[x + xSize][y + j]) {
+                                if (x + xSize > countX - 1 || mOccupied.cells[x + xSize][y + j]) {
                                     // We can't move out horizontally
                                     hitMaxX = true;
                                 }
@@ -1226,7 +1242,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
                     }
                 }
                 validRegions.push(currentRect);
-                double distance = Math.hypot(cellXY[0] - pixelX,  cellXY[1] - pixelY);
+                double distance = Math.hypot(cellXY[0] - pixelX, cellXY[1] - pixelY);
 
                 if ((distance <= bestDistance && !contained) ||
                         currentRect.contains(bestRect)) {
@@ -1257,21 +1273,21 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
      * desired location. This method computers distance based on unit grid distances,
      * not pixel distances.
      *
-     * @param cellX The X cell nearest to which you want to search for a vacant area.
-     * @param cellY The Y cell nearest which you want to search for a vacant area.
-     * @param spanX Horizontal span of the object.
-     * @param spanY Vertical span of the object.
-     * @param direction The favored direction in which the views should move from x, y
-     * @param occupied The array which represents which cells in the CellLayout are occupied
+     * @param cellX         The X cell nearest to which you want to search for a vacant area.
+     * @param cellY         The Y cell nearest which you want to search for a vacant area.
+     * @param spanX         Horizontal span of the object.
+     * @param spanY         Vertical span of the object.
+     * @param direction     The favored direction in which the views should move from x, y
+     * @param occupied      The array which represents which cells in the CellLayout are occupied
      * @param blockOccupied The array which represents which cells in the specified block (cellX,
-     *        cellY, spanX, spanY) are occupied. This is used when try to move a group of views.
-     * @param result Array in which to place the result, or null (in which case a new array will
-     *        be allocated)
+     *                      cellY, spanX, spanY) are occupied. This is used when try to move a group of views.
+     * @param result        Array in which to place the result, or null (in which case a new array will
+     *                      be allocated)
      * @return The X, Y cell of a vacant area that can contain this object,
-     *         nearest the requested location.
+     * nearest the requested location.
      */
     private int[] findNearestArea(int cellX, int cellY, int spanX, int spanY, int[] direction,
-            boolean[][] occupied, boolean blockOccupied[][], int[] result) {
+                                  boolean[][] occupied, boolean blockOccupied[][], int[] result) {
         // Keep track of best-scoring drop area
         final int[] bestXY = result != null ? result : new int[2];
         float bestDistance = Float.MAX_VALUE;
@@ -1299,7 +1315,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
                 // and that passed in.
                 int curDirectionScore = direction[0] * curDirection[0] +
                         direction[1] * curDirection[1];
-                if (Float.compare(distance,  bestDistance) < 0 ||
+                if (Float.compare(distance, bestDistance) < 0 ||
                         (Float.compare(distance, bestDistance) == 0
                                 && curDirectionScore > bestDirectionScore)) {
                     bestDistance = distance;
@@ -1319,7 +1335,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     private boolean addViewToTempLocation(View v, Rect rectOccupiedByPotentialDrop,
-            int[] direction, ItemConfiguration currentState) {
+                                          int[] direction, ItemConfiguration currentState) {
         CellAndSpan c = currentState.map.get(v);
         boolean success = false;
         mTmpOccupied.markCells(c, false);
@@ -1463,7 +1479,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         }
 
         void shift(int whichEdge, int delta) {
-            for (View v: views) {
+            for (View v : views) {
                 CellAndSpan c = config.map.get(v);
                 switch (whichEdge) {
                     case LEFT:
@@ -1497,8 +1513,10 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         }
 
         PositionComparator comparator = new PositionComparator();
+
         class PositionComparator implements Comparator<View> {
             int whichEdge = 0;
+
             public int compare(View left, View right) {
                 CellAndSpan l = config.map.get(left);
                 CellAndSpan r = config.map.get(right);
@@ -1523,7 +1541,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     private boolean pushViewsToTempLocation(ArrayList<View> views, Rect rectOccupiedByPotentialDrop,
-            int[] direction, View dragView, ItemConfiguration currentState) {
+                                            int[] direction, View dragView, ItemConfiguration currentState) {
 
         ViewCluster cluster = new ViewCluster(views, currentState);
         Rect clusterRect = cluster.getBoundingRect();
@@ -1553,7 +1571,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         }
 
         // Mark the occupied state as false for the group of views we want to move.
-        for (View v: views) {
+        for (View v : views) {
             CellAndSpan c = currentState.map.get(v);
             mTmpOccupied.markCells(c, false);
         }
@@ -1569,7 +1587,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         cluster.sortConfigurationForEdgePush(whichEdge);
 
         while (pushDistance > 0 && !fail) {
-            for (View v: currentState.sortedViews) {
+            for (View v : currentState.sortedViews) {
                 // For each view that isn't in the cluster, we see if the leading edge of the
                 // cluster is contacting the edge of that view. If so, we add that view to the
                 // cluster.
@@ -1609,7 +1627,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         }
 
         // In either case, we set the occupied array as marked for the location of the views
-        for (View v: cluster.views) {
+        for (View v : cluster.views) {
             CellAndSpan c = currentState.map.get(v);
             mTmpOccupied.markCells(c, true);
         }
@@ -1618,7 +1636,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     private boolean addViewsToTempLocation(ArrayList<View> views, Rect rectOccupiedByPotentialDrop,
-            int[] direction, View dragView, ItemConfiguration currentState) {
+                                           int[] direction, View dragView, ItemConfiguration currentState) {
         if (views.size() == 0) return true;
 
         boolean success = false;
@@ -1627,7 +1645,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         currentState.getBoundingRectForViews(views, boundingRect);
 
         // Mark the occupied state as false for the group of views we want to move.
-        for (View v: views) {
+        for (View v : views) {
             CellAndSpan c = currentState.map.get(v);
             mTmpOccupied.markCells(c, false);
         }
@@ -1637,7 +1655,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         int left = boundingRect.left;
         // We mark more precisely which parts of the bounding rect are truly occupied, allowing
         // for interlocking.
-        for (View v: views) {
+        for (View v : views) {
             CellAndSpan c = currentState.map.get(v);
             blockOccupied.markCells(c.cellX - left, c.cellY - top, c.spanX, c.spanY, true);
         }
@@ -1652,7 +1670,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         if (mTempLocation[0] >= 0 && mTempLocation[1] >= 0) {
             int deltaX = mTempLocation[0] - boundingRect.left;
             int deltaY = mTempLocation[1] - boundingRect.top;
-            for (View v: views) {
+            for (View v : views) {
                 CellAndSpan c = currentState.map.get(v);
                 c.cellX += deltaX;
                 c.cellY += deltaY;
@@ -1661,7 +1679,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         }
 
         // In either case, we set the occupied array as marked for the location of the views
-        for (View v: views) {
+        for (View v : views) {
             CellAndSpan c = currentState.map.get(v);
             mTmpOccupied.markCells(c, true);
         }
@@ -1672,7 +1690,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     // to push items in each of the cardinal directions, in an order based on the direction vector
     // passed.
     private boolean attemptPushInDirection(ArrayList<View> intersectingViews, Rect occupied,
-            int[] direction, View ignoreView, ItemConfiguration solution) {
+                                           int[] direction, View ignoreView, ItemConfiguration solution) {
         if ((Math.abs(direction[0]) + Math.abs(direction[1])) > 1) {
             // If the direction vector has two non-zero components, we try pushing
             // separately in each of the components.
@@ -1766,7 +1784,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     private boolean rearrangementExists(int cellX, int cellY, int spanX, int spanY, int[] direction,
-            View ignoreView, ItemConfiguration solution) {
+                                        View ignoreView, ItemConfiguration solution) {
         // Return early if get invalid cell positions
         if (cellX < 0 || cellY < 0) return false;
 
@@ -1783,7 +1801,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         }
         Rect r0 = new Rect(cellX, cellY, cellX + spanX, cellY + spanY);
         Rect r1 = new Rect();
-        for (View child: solution.map.keySet()) {
+        for (View child : solution.map.keySet()) {
             if (child == ignoreView) continue;
             CellAndSpan c = solution.map.get(child);
             LayoutParams lp = (LayoutParams) child.getLayoutParams();
@@ -1839,8 +1857,8 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     private ItemConfiguration findReorderSolution(int pixelX, int pixelY, int minSpanX, int minSpanY,
-            int spanX, int spanY, int[] direction, View dragView, boolean decX,
-            ItemConfiguration solution) {
+                                                  int spanX, int spanY, int[] direction, View dragView, boolean decX,
+                                                  ItemConfiguration solution) {
         // Copy the current state into the solution. This solution will be manipulated as necessary.
         copyCurrentStateToSolution(solution, false);
         // Copy the current occupied array into the temporary occupied array. This array will be
@@ -1939,7 +1957,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     // This method starts or changes the reorder preview animations
     private void beginOrAdjustReorderPreviewAnimations(ItemConfiguration solution,
-            View dragView, int delay, int mode) {
+                                                       View dragView, int delay, int mode) {
         int childCount = mShortcutsAndWidgets.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = mShortcutsAndWidgets.getChildAt(i);
@@ -1980,7 +1998,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         Animator a;
 
         public ReorderPreviewAnimation(View child, int mode, int cellX0, int cellY0, int cellX1,
-                int cellY1, int spanX, int spanY) {
+                                       int cellY1, int spanX, int spanY) {
             regionToCenterPoint(cellX0, cellY0, spanX, spanY, mTmpPoint);
             final int x0 = mTmpPoint[0];
             final int y0 = mTmpPoint[1];
@@ -2000,14 +2018,14 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
             if (dX == dY && dX == 0) {
             } else {
                 if (dY == 0) {
-                    finalDeltaX += - dir * Math.signum(dX) * mReorderPreviewAnimationMagnitude;
+                    finalDeltaX += -dir * Math.signum(dX) * mReorderPreviewAnimationMagnitude;
                 } else if (dX == 0) {
-                    finalDeltaY += - dir * Math.signum(dY) * mReorderPreviewAnimationMagnitude;
+                    finalDeltaY += -dir * Math.signum(dY) * mReorderPreviewAnimationMagnitude;
                 } else {
-                    double angle = Math.atan( (float) (dY) / dX);
-                    finalDeltaX += (int) (- dir * Math.signum(dX) *
+                    double angle = Math.atan((float) (dY) / dX);
+                    finalDeltaX += (int) (-dir * Math.signum(dX) *
                             Math.abs(Math.cos(angle) * mReorderPreviewAnimationMagnitude));
-                    finalDeltaY += (int) (- dir * Math.signum(dY) *
+                    finalDeltaY += (int) (-dir * Math.signum(dY) *
                             Math.abs(Math.sin(angle) * mReorderPreviewAnimationMagnitude));
                 }
             }
@@ -2091,7 +2109,8 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
             }
         }
 
-        @Thunk void completeAnimationImmediately() {
+        @Thunk
+        void completeAnimationImmediately() {
             if (a != null) {
                 a.cancel();
             }
@@ -2110,7 +2129,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     private void completeAndClearReorderPreviewAnimations() {
-        for (ReorderPreviewAnimation a: mShakeAnimators.values()) {
+        for (ReorderPreviewAnimation a : mShakeAnimators.values()) {
             a.completeAnimationImmediately();
         }
         mShakeAnimators.clear();
@@ -2161,7 +2180,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     private ItemConfiguration findConfigurationNoShuffle(int pixelX, int pixelY, int minSpanX, int minSpanY,
-            int spanX, int spanY, View dragView, ItemConfiguration solution) {
+                                                         int spanX, int spanY, View dragView, ItemConfiguration solution) {
         int[] result = new int[2];
         int[] resultSpan = new int[2];
         findNearestVacantArea(pixelX, pixelY, minSpanX, minSpanY, spanX, spanY, result,
@@ -2188,7 +2207,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     or right, which helps make pushing feel right.
     */
     private void getDirectionVectorForDrop(int dragViewCenterX, int dragViewCenterY, int spanX,
-            int spanY, View dragView, int[] resultDirection) {
+                                           int spanY, View dragView, int[] resultDirection) {
         int[] targetDestination = new int[2];
 
         findNearestArea(dragViewCenterX, dragViewCenterY, spanX, spanY, targetDestination);
@@ -2227,7 +2246,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
     // For a given cell and span, fetch the set of views intersecting the region.
     private void getViewsIntersectingRegion(int cellX, int cellY, int spanX, int spanY,
-            View dragView, Rect boundingRect, ArrayList<View> intersectingViews) {
+                                            View dragView, Rect boundingRect, ArrayList<View> intersectingViews) {
         if (boundingRect != null) {
             boundingRect.set(cellX, cellY, cellX + spanX, cellY + spanY);
         }
@@ -2250,7 +2269,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     boolean isNearestDropLocationOccupied(int pixelX, int pixelY, int spanX, int spanY,
-            View dragView, int[] result) {
+                                          View dragView, int[] result) {
         result = findNearestArea(pixelX, pixelY, spanX, spanY, result);
         getViewsIntersectingRegion(result[0], result[1], spanX, spanY, dragView, null,
                 mIntersectingViews);
@@ -2276,13 +2295,13 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     boolean createAreaForResize(int cellX, int cellY, int spanX, int spanY,
-            View dragView, int[] direction, boolean commit) {
+                                View dragView, int[] direction, boolean commit) {
         int[] pixelXY = new int[2];
         regionToCenterPoint(cellX, cellY, spanX, spanY, pixelXY);
 
         // First we determine if things have moved enough to cause a different layout
         ItemConfiguration swapSolution = findReorderSolution(pixelXY[0], pixelXY[1], spanX, spanY,
-                 spanX,  spanY, direction, dragView,  true,  new ItemConfiguration());
+                spanX, spanY, direction, dragView, true, new ItemConfiguration());
 
         setUseTempCoords(true);
         if (swapSolution != null && swapSolution.isSolution) {
@@ -2307,7 +2326,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     }
 
     int[] performReorder(int pixelX, int pixelY, int minSpanX, int minSpanY, int spanX, int spanY,
-            View dragView, int[] result, int resultSpan[], int mode) {
+                         View dragView, int[] result, int resultSpan[], int mode) {
         // First we determine if things have moved enough to cause a different layout
         result = findNearestArea(pixelX, pixelY, spanX, spanY, result);
 
@@ -2319,7 +2338,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         // direction vector, since we want the solution to match the preview, and it's possible
         // that the exact position of the item has changed to result in a new reordering outcome.
         if ((mode == MODE_ON_DROP || mode == MODE_ON_DROP_EXTERNAL || mode == MODE_ACCEPT_DROP)
-               && mPreviousReorderDirection[0] != INVALID_DIRECTION) {
+                && mPreviousReorderDirection[0] != INVALID_DIRECTION) {
             mDirectionVector[0] = mPreviousReorderDirection[0];
             mDirectionVector[1] = mPreviousReorderDirection[1];
             // We reset this vector after drop
@@ -2335,7 +2354,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
         // Find a solution involving pushing / displacing any items in the way
         ItemConfiguration swapSolution = findReorderSolution(pixelX, pixelY, minSpanX, minSpanY,
-                 spanX,  spanY, mDirectionVector, dragView,  true,  new ItemConfiguration());
+                spanX, spanY, mDirectionVector, dragView, true, new ItemConfiguration());
 
         // We attempt the approach which doesn't shuffle views at all
         ItemConfiguration noShuffleSolution = findConfigurationNoShuffle(pixelX, pixelY, minSpanX,
@@ -2393,7 +2412,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
                     setItemPlacementDirty(false);
                 } else {
                     beginOrAdjustReorderPreviewAnimations(finalSolution, dragView,
-                            REORDER_ANIMATION_DURATION,  ReorderPreviewAnimation.MODE_PREVIEW);
+                            REORDER_ANIMATION_DURATION, ReorderPreviewAnimation.MODE_PREVIEW);
                 }
             }
         } else {
@@ -2412,6 +2431,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     void setItemPlacementDirty(boolean dirty) {
         mItemPlacementDirty = dirty;
     }
+
     boolean isItemPlacementDirty() {
         return mItemPlacementDirty;
     }
@@ -2425,14 +2445,14 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
         void save() {
             // Copy current state into savedMap
-            for (View v: map.keySet()) {
+            for (View v : map.keySet()) {
                 savedMap.get(v).copyFrom(map.get(v));
             }
         }
 
         void restore() {
             // Restore current state from savedMap
-            for (View v: savedMap.keySet()) {
+            for (View v : savedMap.keySet()) {
                 map.get(v).copyFrom(savedMap.get(v));
             }
         }
@@ -2449,7 +2469,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
 
         void getBoundingRectForViews(ArrayList<View> views, Rect outRect) {
             boolean first = true;
-            for (View v: views) {
+            for (View v : views) {
                 CellAndSpan c = map.get(v);
                 if (first) {
                     outRect.set(c.cellX, c.cellY, c.cellX + c.spanX, c.cellY + c.spanY);
@@ -2465,14 +2485,14 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
      * Find a starting cell position that will fit the given bounds nearest the requested
      * cell location. Uses Euclidean distance to score multiple vacant areas.
      *
-     * @param pixelX The X location at which you want to search for a vacant area.
-     * @param pixelY The Y location at which you want to search for a vacant area.
-     * @param spanX Horizontal span of the object.
-     * @param spanY Vertical span of the object.
+     * @param pixelX     The X location at which you want to search for a vacant area.
+     * @param pixelY     The Y location at which you want to search for a vacant area.
+     * @param spanX      Horizontal span of the object.
+     * @param spanY      Vertical span of the object.
      * @param ignoreView Considers space occupied by this view as unoccupied
-     * @param result Previously returned value to possibly recycle.
+     * @param result     Previously returned value to possibly recycle.
      * @return The X, Y cell of a vacant area that can contain this object,
-     *         nearest the requested location.
+     * nearest the requested location.
      */
     public int[] findNearestArea(int pixelX, int pixelY, int spanX, int spanY, int[] result) {
         return findNearestArea(pixelX, pixelY, spanX, spanY, spanX, spanY, false, result, null);
@@ -2490,9 +2510,8 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
      *
      * @param cellXY The array that will contain the position of a vacant cell if such a cell
      *               can be found.
-     * @param spanX The horizontal span of the cell we want to find.
-     * @param spanY The vertical span of the cell we want to find.
-     *
+     * @param spanX  The horizontal span of the cell we want to find.
+     * @param spanY  The vertical span of the cell we want to find.
      * @return True if a vacant cell of the specified dimension was found, false otherwise.
      */
     public boolean findCellForSpan(int[] cellXY, int spanX, int spanY) {
@@ -2549,10 +2568,10 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
     /**
      * Computes a bounding rectangle for a range of cells
      *
-     * @param cellX X coordinate of upper left corner expressed as a cell position
-     * @param cellY Y coordinate of upper left corner expressed as a cell position
-     * @param cellHSpan Width in cells
-     * @param cellVSpan Height in cells
+     * @param cellX      X coordinate of upper left corner expressed as a cell position
+     * @param cellY      Y coordinate of upper left corner expressed as a cell position
+     * @param cellHSpan  Width in cells
+     * @param cellVSpan  Height in cells
      * @param resultRect Rect into which to put the results
      */
     public void cellToRect(int cellX, int cellY, int cellHSpan, int cellVSpan, Rect resultRect) {
@@ -2586,7 +2605,7 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         return getPaddingLeft() + getPaddingRight() + (mCountX * mCellWidth);
     }
 
-    public int getDesiredHeight()  {
+    public int getDesiredHeight() {
         return getPaddingTop() + getPaddingBottom() + (mCountY * mCellHeight);
     }
 
@@ -2714,12 +2733,12 @@ public class CellLayout extends ViewGroup implements BubbleTextShadowHandler {
         /**
          * Use this method, as opposed to {@link #setup(int, int, boolean, int)}, if the view needs
          * to be scaled.
-         *
+         * <p>
          * ie. In multi-window mode, we setup widgets so that they are measured and laid out
          * using their full/invariant device profile sizes.
          */
         public void setup(int cellWidth, int cellHeight, boolean invertHorizontally, int colCount,
-                float cellScaleX, float cellScaleY) {
+                          float cellScaleX, float cellScaleY) {
             if (isLockedToGrid) {
                 final int myCellHSpan = cellHSpan;
                 final int myCellVSpan = cellVSpan;

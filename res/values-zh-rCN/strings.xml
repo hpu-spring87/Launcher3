@@ -124,6 +124,7 @@
     <string name="action_dismiss_notification" msgid="5909461085055959187">"关闭"</string>
     <string name="notification_dismissed" msgid="6002233469409822874">"已关闭通知"</string>
     <string name="label_search">搜索</string>
-    <string name="week_day_format">%1$s，%2$s 年</string>
+    <string name="week_day_format">%1$s 年，%2$s</string>
+    <string name="slogan_day_format">不宜瞎想，宜写代码，静以修身，俭以养德 。</string>
     <string name="title_app_suggestions">应用推荐</string>
 </resources>

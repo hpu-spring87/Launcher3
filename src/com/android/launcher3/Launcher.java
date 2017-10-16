@@ -441,7 +441,7 @@ public class Launcher extends BaseActivity
         mDefaultKeySsb = new SpannableStringBuilder();
         Selection.setSelection(mDefaultKeySsb, 0);
 
-        if (PackageManagerHelper.isAppEnabled(getPackageManager(), "com.google.android.googlequicksearchbox"))
+        //if (PackageManagerHelper.isAppEnabled(getPackageManager(), "com.google.android.googlequicksearchbox"))
             mLauncherTab = new LauncherTab(this);
 
         mRotationEnabled = getResources().getBoolean(R.bool.allow_rotation);

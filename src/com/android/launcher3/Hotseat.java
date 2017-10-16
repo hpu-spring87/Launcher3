@@ -112,7 +112,7 @@ public class Hotseat extends FrameLayout
     protected void onFinishInflate() {
         super.onFinishInflate();
         DeviceProfile grid = mLauncher.getDeviceProfile();
-        mContent = (CellLayout) findViewById(R.id.layout);
+        mContent = findViewById(R.id.layout);
         if (grid.isVerticalBarLayout()) {
             mContent.setGridSize(1, grid.inv.numHotseatIcons);
         } else {
@@ -159,6 +159,7 @@ public class Hotseat extends FrameLayout
             int y = getCellYFromOrder(allAppsButtonRank);
             CellLayout.LayoutParams lp = new CellLayout.LayoutParams(x, y, 1, 1);
             lp.canReorder = false;
+            //添加底部icon
             mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
         }
     }

@@ -22,6 +22,7 @@ public class DateWidgetView extends LinearLayout implements TextWatcher {
     private float dateText1TextSize;
     private DoubleShadowTextClock dateText1;
     private DoubleShadowTextClock dateText2;
+    private DoubleShadowTextClock dateText3;
     private int width = 0;
 
     public DateWidgetView(Context context, AttributeSet attributeSet) {
@@ -36,7 +37,9 @@ public class DateWidgetView extends LinearLayout implements TextWatcher {
         dateText1.addTextChangedListener(this);
         dateText1.setFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), "MMMMd"));
         dateText2 = findViewById(R.id.date_text2);
-        dateText2.setFormat(getContext().getString(R.string.week_day_format, "EEEE", "yyyy"));
+        dateText2.setFormat(getContext().getString(R.string.week_day_format, "yyyy", "EEEE"));
+        dateText3 = findViewById(R.id.date_text3);
+        dateText3.setFormat(getContext().getString(R.string.slogan_day_format));
         init();
     }
 

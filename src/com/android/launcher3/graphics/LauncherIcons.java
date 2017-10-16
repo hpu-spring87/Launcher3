@@ -35,6 +35,7 @@ import android.graphics.drawable.PaintDrawable;
 import android.os.Build;
 import android.os.Process;
 import android.os.UserHandle;
+import android.util.Log;
 
 import com.android.launcher3.AppInfo;
 import com.android.launcher3.IconCache;
@@ -108,7 +109,7 @@ public class LauncherIcons {
                 dr.setBounds(0, 0, 1, 1);
                 scale = normalizer.getScale(icon, null, dr.getIconMask(), outShape);
                 if (FeatureFlags.LEGACY_ICON_TREATMENT &&
-                        !outShape[0]){
+                        !outShape[0]) {
                     Drawable wrappedIcon = wrapToAdaptiveIconDrawable(context, icon, scale);
                     if (wrappedIcon != icon) {
                         icon = wrappedIcon;
@@ -211,7 +212,7 @@ public class LauncherIcons {
                 icon instanceof AdaptiveIconDrawable) {
             scale = ShadowGenerator.getScaleForBounds(new RectF(0, 0, 0, 0));
         }
-        Bitmap bitmap =  createIconBitmap(icon, context, scale);
+        Bitmap bitmap = createIconBitmap(icon, context, scale);
         if (FeatureFlags.ADAPTIVE_ICON_SHADOW && Utilities.isAtLeastO() &&
                 icon instanceof AdaptiveIconDrawable) {
             bitmap = ShadowGenerator.getInstance(context).recreateIcon(bitmap);
@@ -261,17 +262,17 @@ public class LauncherIcons {
             final Canvas canvas = sCanvas;
             canvas.setBitmap(bitmap);
 
-            final int left = (textureWidth-width) / 2;
-            final int top = (textureHeight-height) / 2;
+            final int left = (textureWidth - width) / 2;
+            final int top = (textureHeight - height) / 2;
 
             sOldBounds.set(icon.getBounds());
             if (Utilities.isAtLeastO() && icon instanceof AdaptiveIconDrawable) {
-                int offset = Math.max((int)(ShadowGenerator.BLUR_FACTOR * iconBitmapSize),
+                int offset = Math.max((int) (ShadowGenerator.BLUR_FACTOR * iconBitmapSize),
                         Math.min(left, top));
                 int size = Math.max(width, height);
                 icon.setBounds(offset, offset, size, size);
             } else {
-                icon.setBounds(left, top, left+width, top+height);
+                icon.setBounds(left, top, left + width, top + height);
             }
             canvas.save(Canvas.MATRIX_SAVE_FLAG);
             canvas.scale(scale, scale, textureWidth / 2, textureHeight / 2);
@@ -314,7 +315,7 @@ public class LauncherIcons {
     }
 
     public static Bitmap createShortcutIcon(ShortcutInfoCompat shortcutInfo, Context context,
-            boolean badged) {
+                                            boolean badged) {
         LauncherAppState app = LauncherAppState.getInstance(context);
         Drawable unbadgedDrawable = DeepShortcutManager.getInstance(context)
                 .getShortcutIconDrawable(shortcutInfo,

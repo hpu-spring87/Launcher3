@@ -40,7 +40,7 @@ public final class FeatureFlags {
     // When enabled the all-apps icon is not added to the hotseat.
     public static final boolean NO_ALL_APPS_ICON = true;
     // When enabled fling down gesture on the first workspace triggers search.
-    public static final boolean PULLDOWN_SEARCH = false;
+    public static final boolean PULLDOWN_SEARCH = true;
     // When enabled fling down gesture opens the notifications.
     public static final boolean PULLDOWN_NOTIFICATIONS = true;
     // When enabled the status bar may show dark icons based on the top of the wallpaper.
@@ -52,5 +52,5 @@ public final class FeatureFlags {
     // When enabled, adaptive icons would have shadows baked when being stored to icon cache.
     public static final boolean ADAPTIVE_ICON_SHADOW = true;
     // When enabled, app discovery will be enabled if service is implemented
-    public static final boolean DISCOVERY_ENABLED = false;
+    public static final boolean DISCOVERY_ENABLED = true;
 }

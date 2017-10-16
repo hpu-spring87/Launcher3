@@ -19,8 +19,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "2.1"
+        versionCode 65535
+        versionName "非Pixel手机专用"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

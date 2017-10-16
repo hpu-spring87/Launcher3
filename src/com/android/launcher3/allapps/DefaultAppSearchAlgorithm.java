@@ -16,9 +16,11 @@
 package com.android.launcher3.allapps;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.android.launcher3.AppInfo;
 import com.android.launcher3.util.ComponentKey;
+import com.android.launcher3.util.HanziToPinyin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class DefaultAppSearchAlgorithm {
     }
 
     public void doSearch(final String query,
-            final AllAppsSearchBarController.Callbacks callback) {
+                         final AllAppsSearchBarController.Callbacks callback) {
         final ArrayList<ComponentKey> result = getTitleMatchResult(query);
         mResultHandler.post(new Runnable() {
 
@@ -60,7 +62,7 @@ public class DefaultAppSearchAlgorithm {
         final String queryTextLower = query.toLowerCase();
         final ArrayList<ComponentKey> result = new ArrayList<>();
         for (AppInfo info : mApps) {
-            if (matches(info, queryTextLower)) {
+            if (matches(info, HanziToPinyin.getInstance().getEasy(queryTextLower))) {
                 result.add(info.toComponentKey());
             }
         }
@@ -70,7 +72,8 @@ public class DefaultAppSearchAlgorithm {
     protected boolean matches(AppInfo info, String query) {
         int queryLength = query.length();
 
-        String title = info.title.toString();
+        String title = HanziToPinyin.getInstance().getEasy(info.title.toString());
+        //Log.e("Match:","title:"+title+"query:"+query);
         int titleLength = title.length();
 
         if (titleLength < queryLength || queryLength <= 0) {
@@ -98,10 +101,10 @@ public class DefaultAppSearchAlgorithm {
     /**
      * Returns true if the current point should be a break point. Following cases
      * are considered as break points:
-     *      1) Any non space character after a space character
-     *      2) Any digit after a non-digit character
-     *      3) Any capital character after a digit or small character
-     *      4) Any capital character before a small character
+     * 1) Any non space character after a space character
+     * 2) Any digit after a non-digit character
+     * 3) Any capital character after a digit or small character
+     * 4) Any capital character before a small character
      */
     protected boolean isBreak(int thisType, int prevType, int nextType) {
         switch (thisType) {
@@ -131,7 +134,7 @@ public class DefaultAppSearchAlgorithm {
                 return true;
             default:
                 // Always a break point at first character
-                return  prevType == Character.UNASSIGNED;
+                return prevType == Character.UNASSIGNED;
         }
     }
 }

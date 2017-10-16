@@ -13,7 +13,7 @@ import com.android.launcher3.allapps.AllAppsContainerView;
 import com.android.launcher3.config.FeatureFlags;
 
 public class InsettableFrameLayout extends FrameLayout implements
-    ViewGroup.OnHierarchyChangeListener, Insettable {
+        ViewGroup.OnHierarchyChangeListener, Insettable {
 
     @ViewDebug.ExportedProperty(category = "launcher")
     protected Rect mInsets = new Rect();
@@ -99,6 +99,7 @@ public class InsettableFrameLayout extends FrameLayout implements
 
     @Override
     public void onChildViewAdded(View parent, View child) {
+        //监听ViewGroup层次结构的变化，添加子View
         setFrameLayoutChildInsets(child, mInsets, new Rect());
     }
 

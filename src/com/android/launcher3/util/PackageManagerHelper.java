@@ -128,7 +128,7 @@ public class PackageManagerHelper {
         }
 
         // Source does not have sufficient permissions.
-        if(mPm.checkPermission(target.activityInfo.permission, srcPackage) !=
+        if (mPm.checkPermission(target.activityInfo.permission, srcPackage) !=
                 PackageManager.PERMISSION_GRANTED) {
             return false;
         }
@@ -149,7 +149,8 @@ public class PackageManagerHelper {
 
         try {
             return mPm.getApplicationInfo(srcPackage, 0).targetSdkVersion >= Build.VERSION_CODES.M;
-        } catch (NameNotFoundException e) { }
+        } catch (NameNotFoundException e) {
+        }
 
         return false;
     }

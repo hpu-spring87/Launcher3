@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -12,8 +11,7 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<!-- The top and bottom paddings are defined in this container, but since we want
+--><!-- The top and bottom paddings are defined in this container, but since we want
      the list view to span the full width (for touch interception purposes), we
      will bake the left/right padding into that view's background itself. -->
 <com.android.launcher3.allapps.AllAppsContainerView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -46,22 +44,22 @@
         <!-- DO NOT CHANGE THE ID -->
         <com.android.launcher3.allapps.AllAppsRecyclerView
             android:id="@+id/apps_list_view"
-            android:layout_below="@+id/search_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/search_container"
             android:layout_gravity="center_horizontal|top"
             android:clipToPadding="false"
             android:descendantFocusability="afterDescendants"
             android:focusable="true"
-            android:paddingStart="@dimen/container_fastscroll_thumb_max_width"
-            android:paddingEnd="@dimen/container_fastscroll_thumb_max_width" />
+            android:paddingEnd="@dimen/container_fastscroll_thumb_max_width"
+            android:paddingStart="@dimen/container_fastscroll_thumb_max_width" />
 
         <!-- Fast scroller popup -->
         <TextView
-            style="@style/FastScrollerPopup"
-            android:layout_below="@+id/search_container"
             android:id="@+id/fast_scroller_popup"
+            style="@style/FastScrollerPopup"
             android:layout_alignParentEnd="true"
+            android:layout_below="@+id/search_container"
             android:layout_marginEnd="@dimen/container_fastscroll_popup_margin" />
 
         <FrameLayout
@@ -77,25 +75,26 @@
                 android:id="@+id/search_box_input"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/all_apps_search_bar_field_height"
-                android:background="@android:color/transparent"
                 android:layout_gravity="bottom"
+                android:background="@android:color/transparent"
                 android:focusableInTouchMode="true"
                 android:gravity="center"
+                android:hint="@string/all_apps_search_bar_hint"
                 android:imeOptions="actionSearch|flagNoExtractUi"
                 android:inputType="text|textNoSuggestions|textCapWords"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:textColor="?android:attr/textColorSecondary"
-                android:hint="@string/all_apps_search_bar_hint"
                 android:textColorHint="@drawable/all_apps_search_hint"
                 android:textSize="16sp" />
         </FrameLayout>
 
     </com.android.launcher3.allapps.AllAppsRecyclerViewContainerView>
+
     <View
-        style="@style/AllAppsNavBarProtection"
         android:id="@+id/nav_bar_bg"
+        style="@style/AllAppsNavBarProtection"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="bottom"

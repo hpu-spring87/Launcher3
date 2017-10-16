@@ -19,8 +19,9 @@ package com.android.launcher3;
 import android.graphics.Rect;
 
 /**
- * Allows the implementing {@link View} to not draw underneath system bars.
+ * Allows the implementing {主要是 View} to not draw underneath system bars.
  * e.g., notification bar on top and home key area on the bottom.
+ * 在手机屏幕底部和顶部区域不进行绘制
  */
 public interface Insettable {
 
