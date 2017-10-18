@@ -120,14 +120,14 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
 
         @Override
         public int getRowCountForAccessibility(RecyclerView.Recycler recycler,
-                RecyclerView.State state) {
+                                               RecyclerView.State state) {
             return super.getRowCountForAccessibility(recycler, state) -
                     getRowsNotForAccessibility(mApps.getAdapterItems().size() - 1);
         }
 
         @Override
         public void onInitializeAccessibilityNodeInfoForItem(RecyclerView.Recycler recycler,
-                RecyclerView.State state, View host, AccessibilityNodeInfoCompat info) {
+                                                             RecyclerView.State state, View host, AccessibilityNodeInfoCompat info) {
             super.onInitializeAccessibilityNodeInfoForItem(recycler, state, host, info);
 
             ViewGroup.LayoutParams lp = host.getLayoutParams();
@@ -182,8 +182,8 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
             if (isIconViewType(mApps.getAdapterItems().get(position).viewType)) {
                 return 1;
             } else {
-                    // Section breaks span the full width
-                    return mAppsPerRow;
+                // Section breaks span the full width
+                return mAppsPerRow;
             }
         }
     }
@@ -304,7 +304,11 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
                 searchMarketView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mLauncher.startActivitySafely(v, mMarketSearchIntent, null);
+                        try {
+                            mLauncher.startActivitySafely(v, mMarketSearchIntent, null);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 return new ViewHolder(searchMarketView);
